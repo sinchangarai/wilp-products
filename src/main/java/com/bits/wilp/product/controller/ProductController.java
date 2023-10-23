@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.bits.wilp.product.model.ProductDTO;
 import com.bits.wilp.product.service.ProductService;
 
 @RestController
+@RequestMapping("/catalog")
 public class ProductController {
     
     @Autowired
@@ -69,6 +72,17 @@ public class ProductController {
             return new ResponseEntity<>("Successfully deleted product with id: " + id, HttpStatus.OK);
         } catch(Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @GetMapping("/products/search")
+    public ResponseEntity<?> findProduct(@RequestParam("query") String query) {
+        List<ProductDTO> products = productService.findProduct(query);
+        if(products.size() > 0){
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(products, HttpStatus.NOT_FOUND);
         }
     }
 }

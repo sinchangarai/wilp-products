@@ -89,4 +89,10 @@ public class ProductServiceImpl implements ProductService {
         ProductDTO product = getSingleProduct(id);
         productRepository.delete(product);
     }
+
+    @Override
+    public List<ProductDTO> findProduct(String query) {
+        List<ProductDTO> products = productRepository.findByCustomQuery(query);
+        return products;
+    }
 }
