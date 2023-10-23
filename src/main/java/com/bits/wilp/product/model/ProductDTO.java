@@ -19,18 +19,11 @@ import lombok.ToString;
 public class ProductDTO {
     @Id
     private String id;
-
     private String name;
-    
     private String description;
-    
     private String productImageLink;
-    
     private Double price;
-
     private Integer availableQuantity;
-      
     private Date createdAt;
-    
     private Date updatedAt;
 }
