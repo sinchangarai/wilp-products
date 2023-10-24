@@ -16,7 +16,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "products")
-public class ProductDTO {
+public class Product {
     @Id
     private String id;
     private String name;

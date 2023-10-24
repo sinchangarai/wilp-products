@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.bits.wilp.product.model.ProductDTO;
+import com.bits.wilp.product.model.Product;
 import com.bits.wilp.product.repository.ProductRepository;
 
 
@@ -18,12 +18,12 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public void createProduct(ProductDTO product) {
+    public void createProduct(Product product) {
         if(product.getName() == null || product.getName().isEmpty() || product.getPrice() == null) {
             throw new IllegalArgumentException("product name or price cannot be empty");
         }
 
-        Optional<ProductDTO> optionalProduct = productRepository.findByProduct(product.getName());
+        Optional<Product> optionalProduct = productRepository.findByProduct(product.getName());
         if(!optionalProduct.isPresent()) {
             if(product.getAvailableQuantity() == null)
                 product.setAvailableQuantity(0);
@@ -38,17 +38,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getAllProducts() {
-        List<ProductDTO> allProducts = productRepository.findAll();
+    public List<Product> getAllProducts() {
+        List<Product> allProducts = productRepository.findAll();
         if(allProducts.size() > 0)
             return allProducts;
         else
-            return new ArrayList<ProductDTO>();
+            return new ArrayList<Product>();
     }
 
     @Override
-    public ProductDTO getSingleProduct(String id) {
-        Optional<ProductDTO> productOptional = productRepository.findById(id);
+    public Product getSingleProduct(String id) {
+        Optional<Product> productOptional = productRepository.findById(id);
         if(productOptional.isPresent()) {
             return productOptional.get();
         } else {
@@ -57,8 +57,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(String id, ProductDTO product) {
-        ProductDTO newProduct = getSingleProduct(id);
+    public Product updateProduct(String id, Product product) {
+        Product newProduct = getSingleProduct(id);
         if(product.getName() != null) {
             newProduct.setName(product.getName());
         }
@@ -86,13 +86,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(String id) {
-        ProductDTO product = getSingleProduct(id);
+        Product product = getSingleProduct(id);
         productRepository.delete(product);
     }
 
     @Override
-    public List<ProductDTO> findProduct(String query) {
-        List<ProductDTO> products = productRepository.findByCustomQuery(query);
+    public List<Product> findProduct(String query) {
+        List<Product> products = productRepository.findByCustomQuery(query);
         return products;
     }
 }

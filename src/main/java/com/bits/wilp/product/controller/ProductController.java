@@ -2,7 +2,10 @@ package com.bits.wilp.product.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.bits.wilp.product.model.ProductDTO;
+import com.bits.wilp.product.model.Product;
 import com.bits.wilp.product.service.ProductService;
+import com.bits.wilp.product.util.HttpUtil;
 
 @RestController
 @RequestMapping("/catalog")
@@ -23,10 +27,11 @@ public class ProductController {
     
     @Autowired
     private ProductService productService;
+    private HttpUtil httpUtil = new HttpUtil();
 
     @GetMapping("/products")
     public ResponseEntity<?> getAllProducts() {
-        List<ProductDTO> prodcuts = productService.getAllProducts();
+        List<Product> prodcuts = productService.getAllProducts();
         return new ResponseEntity<>(prodcuts, prodcuts.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
@@ -34,8 +39,8 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public ResponseEntity<?> getSingleProduct(@PathVariable("id") String id) {
         try{
-            ProductDTO product = productService.getSingleProduct(id);
-            return new ResponseEntity<ProductDTO>(product, HttpStatus.OK);
+            Product product = productService.getSingleProduct(id);
+            return new ResponseEntity<Product>(product, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -43,10 +48,14 @@ public class ProductController {
 
 
     @PostMapping("/products")
-    public ResponseEntity<?> createProduct(@RequestBody ProductDTO product) {
+    public ResponseEntity<?> createProduct(@RequestBody Product product, HttpServletRequest request) {
+        boolean isJwtExpired = httpUtil.isJwtExpired(request);
+        if(isJwtExpired)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
         try{
             productService.createProduct(product);
-            return new ResponseEntity<ProductDTO>(product, HttpStatus.OK);
+            return new ResponseEntity<Product>(product, HttpStatus.OK);
         } catch(Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -54,10 +63,14 @@ public class ProductController {
 
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") String id, @RequestBody ProductDTO product) {
+    public ResponseEntity<?> updateProduct(@PathVariable("id") String id, @RequestBody Product product, HttpServletRequest request) {
+        boolean isJwtExpired = httpUtil.isJwtExpired(request);
+        if(isJwtExpired)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
         try{
-            ProductDTO newProduct = productService.updateProduct(id, product);
-            return new ResponseEntity<ProductDTO>(newProduct, HttpStatus.OK);
+            Product newProduct = productService.updateProduct(id, product);
+            return new ResponseEntity<Product>(newProduct, HttpStatus.OK);
         } catch(Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -66,7 +79,11 @@ public class ProductController {
 
     
     @DeleteMapping("/products/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") String id, HttpServletRequest request) {
+        boolean isJwtExpired = httpUtil.isJwtExpired(request);
+        if(isJwtExpired)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
         try{
             productService.deleteProduct(id);
             return new ResponseEntity<>("Successfully deleted product with id: " + id, HttpStatus.OK);
@@ -77,8 +94,12 @@ public class ProductController {
 
 
     @GetMapping("/products/search")
-    public ResponseEntity<?> findProduct(@RequestParam("query") String query) {
-        List<ProductDTO> products = productService.findProduct(query);
+    public ResponseEntity<?> findProduct(@RequestParam("query") String query, HttpServletRequest request) {
+        boolean isJwtExpired = httpUtil.isJwtExpired(request);
+        if(isJwtExpired)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        List<Product> products = productService.findProduct(query);
         if(products.size() > 0){
             return new ResponseEntity<>(products, HttpStatus.OK);
         } else {
