@@ -30,6 +30,7 @@ public class HttpUtil {
             response = restTemplate.exchange(this.userServiceBaseUrl + "/token-expiry",
                     HttpMethod.GET, requestEntity, String.class);
         } catch(RestClientException ioe) {
+            System.out.println(ioe.getMessage());
             return true;
         }
     
