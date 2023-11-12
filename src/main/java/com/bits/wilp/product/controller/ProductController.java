@@ -27,7 +27,8 @@ public class ProductController {
     
     @Autowired
     private ProductService productService;
-    private HttpUtil httpUtil = new HttpUtil();
+    @Autowired
+    private HttpUtil httpUtil;
 
     @GetMapping("/products")
     public ResponseEntity<?> getAllProducts() {
