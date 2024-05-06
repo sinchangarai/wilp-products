@@ -50,9 +50,6 @@ public class ProductController {
 
     @PostMapping("/products")
     public ResponseEntity<?> createProduct(@RequestBody Product product, HttpServletRequest request) {
-        boolean isJwtExpired = httpUtil.isJwtExpired(request);
-        if(isJwtExpired)
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         try{
             productService.createProduct(product);
@@ -65,9 +62,6 @@ public class ProductController {
 
     @PutMapping("/products/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable("id") String id, @RequestBody Product product, HttpServletRequest request) {
-        boolean isJwtExpired = httpUtil.isJwtExpired(request);
-        if(isJwtExpired)
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         try{
             Product newProduct = productService.updateProduct(id, product);
@@ -81,9 +75,6 @@ public class ProductController {
     
     @DeleteMapping("/products/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") String id, HttpServletRequest request) {
-        boolean isJwtExpired = httpUtil.isJwtExpired(request);
-        if(isJwtExpired)
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         try{
             productService.deleteProduct(id);
@@ -96,9 +87,6 @@ public class ProductController {
 
     @GetMapping("/products/search")
     public ResponseEntity<?> findProduct(@RequestParam("query") String query, HttpServletRequest request) {
-        boolean isJwtExpired = httpUtil.isJwtExpired(request);
-        if(isJwtExpired)
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         List<Product> products = productService.findProduct(query);
         if(products.size() > 0){
