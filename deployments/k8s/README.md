@@ -88,7 +88,7 @@ export ingress\_ip=$(kubectl get ing -n app -o jsonpath='{.items\[0\].status.loa
 
 ######################################## Test the app ##########################################
 
-curl --location 'http://ingress\_ip:80/catalog/products' \\
+curl --location 'http://${ingress\_ip}:80/catalog/products' \\
 
 \--header 'Host: test.ingress-nginx.com' \\
 
@@ -104,7 +104,7 @@ curl --location 'http://ingress\_ip:80/catalog/products' \\
 
 }'
 
-curl --location 'http://ingress\_ip:80/catalog/products' \\
+curl --location 'http://${ingress\_ip}:80/catalog/products' \\
 
 \--header 'Host: test.ingress-nginx.com' \\
 
@@ -120,7 +120,7 @@ curl --location 'http://ingress\_ip:80/catalog/products' \\
 
 }'
 
-curl --location 'http://ingress\_ip:80/catalog/products' \\
+curl --location 'http://${ingress\_ip}:80/catalog/products' \\
 
 \--header 'Host: test.ingress-nginx.com'
 
