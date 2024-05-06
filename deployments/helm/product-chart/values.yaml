@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: sinchangarai/product-image
+  pullPolicy: Always
+  tag: latest
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: true
+  className: nginx
+  tls: []
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

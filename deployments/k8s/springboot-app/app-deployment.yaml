@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: product
+  name: product
+  namespace: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: product
+    spec:
+      containers:
+      - image: sinchangarai/product-image:latest
+        imagePullPolicy: Always
+        name: product-image
+        resources: {}

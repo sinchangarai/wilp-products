@@ -1,0 +1,17 @@
+image:
+  repository: mongo
+  pullPolicy: Always
+  tag: latest
+
+mongodb:
+  initUsername: root
+  initPassword: password
+  dataVolume: /data/db
+
+service:
+  type: ClusterIP
+  port: 27017
+
+storage:
+  name: mongo-storage
+  provisioner: kubernetes.io/gce-pd
