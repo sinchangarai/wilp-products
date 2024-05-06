@@ -21,7 +21,7 @@ spec:
         app: product
     spec:
       containers:
-      - image: sinchangarai/product-image:latest
+      - image: sinchangarai/product-image:2.2
         imagePullPolicy: Always
         name: product-image
         resources: {}
