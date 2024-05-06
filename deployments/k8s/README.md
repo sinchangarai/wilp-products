@@ -8,6 +8,8 @@ helm repo update
 
 kubectl create ns prom
 
+helm install prometheus prometheus-community/kube-prometheus-stack -n prom
+
 kubectl get svc prometheus-grafana -o yaml -n prom > prom-stack-svc.yaml
 
 perl -0777 -i.bak -pe 's/type: ClusterIP/type: LoadBalancer/' prom-stack-svc.yaml
